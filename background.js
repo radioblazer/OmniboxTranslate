@@ -5,6 +5,10 @@ InstantTranslate.prototype = {
 
   onInputEntered: function(text)
   {
+    if (!text || text.length < 7) {
+      return this.onError();
+    }
+
     var params = text.split(' ');
 
     if (!params || params.length < 3) {
@@ -23,10 +27,14 @@ InstantTranslate.prototype = {
     console.log('inputChanged: ' + text);
   },
 
-  copyToClipboard: function(str, mimetype)
+  copyToClipboard: function(str)
   {
+    if (!str) {
+      return onError();
+    }
+
     document.oncopy = function(event) {
-      event.clipboardData.setData(mimetype, str);
+      event.clipboardData.setData("text/plain", str);
       event.preventDefault();
     };
     document.execCommand("Copy", false, null);
@@ -34,16 +42,15 @@ InstantTranslate.prototype = {
 
   translateText: function(from, to, phrase)
   {
+    if (!from || !to || !phrase) {
+      return onError();
+    }
+    
     var key = ' ';
     var query = 'https://www.googleapis.com/language/translate/v2?key=' + key +
       '&source=' + from +
       '&target=' + to +
       'callback=translateText&q=' + phrase;
-
-  },
-
-  onError: function(errMessage) {
-
   },
 
   showNotification: function() {
@@ -55,6 +62,10 @@ InstantTranslate.prototype = {
         iconUrl: 'logo48.png'
       }, function(id) {});
     });
+  },
+
+  onError: function(errMessage) {
+
   }
 
 }
