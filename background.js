@@ -53,7 +53,7 @@ InstantTranslate.prototype = {
     var that = this;
 
     var request = $.ajax({
-      url: "https://www.googleapis.com/language/translate/v2",
+      url: this.api_url,
       data: {
         key: that.api_key,
         source: from,
