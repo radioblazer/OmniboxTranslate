@@ -11,14 +11,5 @@
   "permissions": ["tabs", "clipboardWrite", "notifications",
                  "contextMenus"],
   "omnibox": { "keyword" : "t" },
-  "commands": {
-    "toggle-OmniboxTranslate": {
-      "suggested_key": {
-        "default": "Alt+R",
-        "mac": "Ctrl+R"
-      },
-      "description": "Toggle OmniboxTranslate"
-    }
-  },
   "manifest_version": 2
 }
