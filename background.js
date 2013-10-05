@@ -20,6 +20,8 @@ InstantTranslate.prototype = {
 
     // if we can avoid having to split the query let's do that instead
     var query = params.splice(2).join(' ');
+
+    this.translateText(from, to, query);
   },
 
   onInputChanged: function(text, suggest)
@@ -45,12 +47,14 @@ InstantTranslate.prototype = {
     if (!from || !to || !phrase) {
       return onError();
     }
-    
+
     var key = ' ';
     var query = 'https://www.googleapis.com/language/translate/v2?key=' + key +
       '&source=' + from +
       '&target=' + to +
       'callback=translateText&q=' + phrase;
+
+    this.copyToClipboard("translated text");
   },
 
   showNotification: function() {
