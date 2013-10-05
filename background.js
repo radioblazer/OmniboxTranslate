@@ -21,6 +21,17 @@ InstantTranslate.prototype = {
 
 }
 
+function showNotification() {
+  chrome.notifications.clear('successPopup', function() {
+    chrome.notifications.create('successPopup', {
+      type: 'basic',
+      title: 'InstantTranslate',
+      message: 'Translation copied to clipboard',
+      iconUrl: 'logo48.png'
+    }, function(id) {});
+  });
+}
+
 var translator = new InstantTranslate();
 
 chrome.omnibox.onInputChanged.addListener(translator.onInputChanged);
