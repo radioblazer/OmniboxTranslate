@@ -1,5 +1,5 @@
 {
-  "name": "InstantTranslate",
+  "name": "Omnibox Translate",
   "description" : "Translate text instantly onto your clipboard.",
   "version": "0.1",
   "background": {
@@ -8,7 +8,17 @@
   "icons": { "16": "logo16.png",
              "48": "logo48.png",
              "128": "logo128.png" },
-  "permissions": ["tabs", "clipboardWrite", "notifications", "contextMenus"],
+  "permissions": ["tabs", "clipboardWrite", "notifications",
+                 "contextMenus", "commands"],
   "omnibox": { "keyword" : "t" },
+  "commands": {
+    "toggle-instanttranslate": {
+      "suggested_key": {
+        "default": "Alt+R",
+        "mac": "Ctrl+R"
+      },
+      "description": "Toggle InstantTranslate"
+    }
+  },
   "manifest_version": 2
 }
