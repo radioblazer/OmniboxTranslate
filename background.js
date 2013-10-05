@@ -22,18 +22,23 @@ InstantTranslate.prototype = {
   },
 
   translate: function(from, to, phrase){
-  	var key = ' ';
-  	var query = 'https://www.googleapis.com/language/translate/v2?key=' + key +
+  	var apiKey = ' ';
+  	var apiUrl = 'https://www.googleapis.com/language/translate/v2?key=' + apiKey +
   				'&source=' + from + 
   				'&target=' + to + 
   				'callback=translateText&q=' + phrase;
-
-  },
-  translateText: function(response){
-  	var translated = response.data.translations[0].translatedText;
-  	console.log(translated);
+  	$.ajax({
+  		url: apiUrl,
+  		dataType: 'jsonp',
+  		success: function(response){
+  			var translated = response.data.translations[0].translatedText;
+  			console.log(translated);
+  		},
+  		error: function(){
+  			console.log("something is fucked up");
+  		}
+  	});
   }
-
 }
 
 function showNotification() {
