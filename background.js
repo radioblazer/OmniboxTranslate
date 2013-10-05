@@ -5,8 +5,19 @@ function InstantTranslate(){
 InstantTranslate.prototype = {
 
   onInputEntered: function(text) {
-    console.log('inputEntered: ' + text);
+    var params = text.split(' ');
 
+    if (!params || params.length < 3) {
+      return this.onError();
+    }
+
+    var from = params[0],
+      to = params[1];
+
+    // if we can avoid having to split the query let's do that instead
+    var query = params.splice(2).join(' ');
+
+    this.copyToClipboard(query);
   },
 
   onInputChanged: function(text, suggest) {
@@ -24,8 +35,8 @@ InstantTranslate.prototype = {
   translate: function(from, to, phrase){
   	var key = ' ';
   	var query = 'https://www.googleapis.com/language/translate/v2?key=' + key +
-  				'&source=' + from + 
-  				'&target=' + to + 
+  				'&source=' + from +
+  				'&target=' + to +
   				'callback=translateText&q=' + phrase;
 
   },
