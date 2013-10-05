@@ -42,6 +42,23 @@ InstantTranslate.prototype = {
     document.execCommand("Copy", false, null);
   },
 
+  translate: function(from, to, phrase){
+  	var apiKey = ' ';
+  	var apiUrl = 'https://www.googleapis.com/language/translate/v2?key=' + apiKey +
+  				'&source=' + from + 
+  				'&target=' + to + 
+  				'callback=translateText&q=' + phrase;
+  	$.ajax({
+  		url: apiUrl,
+  		dataType: 'jsonp',
+  		success: function(response){
+  			var translated = response.data.translations[0].translatedText;
+  			console.log(translated);
+  		},
+  		error: function(){
+  			console.log("something is fucked up");
+  		}
+  	});
   translateText: function(from, to, phrase)
   {
     if (!from || !to || !phrase) {
@@ -71,7 +88,6 @@ InstantTranslate.prototype = {
   onError: function(errMessage) {
 
   }
-
 }
 
 
