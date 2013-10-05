@@ -9,15 +9,15 @@
              "48": "logo48.png",
              "128": "logo128.png" },
   "permissions": ["tabs", "clipboardWrite", "notifications",
-                 "contextMenus", "commands"],
+                 "contextMenus"],
   "omnibox": { "keyword" : "t" },
   "commands": {
-    "toggle-instanttranslate": {
+    "toggle-OmniboxTranslate": {
       "suggested_key": {
         "default": "Alt+R",
         "mac": "Ctrl+R"
       },
-      "description": "Toggle InstantTranslate"
+      "description": "Toggle OmniboxTranslate"
     }
   },
   "manifest_version": 2
