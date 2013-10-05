@@ -1,6 +1,6 @@
 function InstantTranslate(){
-  this.api_key = 'AIzaSyAan9zXDOxt_kaxwUH2jla-_vMsFUNUEoE';
-  this.api_url = 'https://www.googleapis.com/language/translate/v2;';
+  this.api_key = 'AIzaSyC4AY79SAW4qjeHjnaivowLRM4PS1OpM9w';
+  this.api_url = 'https://www.googleapis.com/language/translate/v2';
 }
 
 InstantTranslate.prototype = {
@@ -52,50 +52,57 @@ InstantTranslate.prototype = {
 
     var that = this;
 
-    var request = $.ajax({
-      url: this.api_url,
+    $.ajax({
+      url: that.api_url,
+      type: "GET",
+      dataType: "json",
       data: {
         key: that.api_key,
         source: from,
         target: to,
         q: phrase
+      },
+      success: function(response) {
+        var translation = response.data.translations[0].translatedText;
+        that.onSuccess(translation);
+      },
+      error: function(err) {
+        that.onError(err);
       }
-    });
+  });
+},
 
-    request.done(function( msg ) {
-      that.onSuccess();
-    });
+showNotification: function(msgObj) {
+  var message;
 
-    request.fail(function( jqXHR, textStatus ) {
-      that.onError(textStatus);
-    });
-  },
-
-  showNotification: function(err) {
-    var message = 'Translation copied to clipboard';
-
-    if (err) {
-      message = err;
-    }
-
-    chrome.notifications.clear('successPopup', function() {
-      chrome.notifications.create('successPopup', {
-        type: 'basic',
-        title: 'InstantTranslate',
-        message: message,
-        iconUrl: 'logo48.png'
-      }, function(id) {});
-    });
-  },
-
-  onError: function(errorMsg) {
-    this.showNotification(errorMsg)
-  },
-
-  onSuccess: function(text) {
-    this.copyToClipboard(text);
-    this.showNotification();
+  if (msgObj.translation) {
+    message = 'Translation copied to clipboard: ' + msgObj.translation;
+  } else {
+    message = msgObj.error;
   }
+
+  chrome.notifications.clear('successPopup', function() {
+    chrome.notifications.create('successPopup', {
+      type: 'basic',
+      title: 'InstantTranslate',
+      message: message,
+      iconUrl: 'logo48.png'
+    }, function(id) {});
+  });
+},
+
+onError: function(errorMsg) {
+  this.showNotification({
+    error: errorMsg
+  })
+},
+
+onSuccess: function(text) {
+  this.copyToClipboard(text);
+  this.showNotification({
+    translation: text
+  });
+}
 }
 
 
