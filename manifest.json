@@ -3,7 +3,7 @@
   "description" : "Translate text instantly onto your clipboard.",
   "version": "0.1",
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js", "jquery-1.10.2.min.js"]
   },
   "icons": { "16": "logo16.png",
              "48": "logo48.png",
