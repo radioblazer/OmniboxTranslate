@@ -1,10 +1,17 @@
 function InstantTranslate() {
-
 }
 
 InstantTranslate.prototype = {
 
-  copy: function(str, mimetype) {
+  onInputEntered: function(text) {
+    console.log('inputEntered: ' + text);
+  },
+
+  onInputChanged: function(text, suggest) {
+    console.log('inputChanged: ' + text);
+  },
+
+  copyToClipboard: function(str, mimetype) {
     document.oncopy = function(event) {
       event.clipboardData.setData(mimetype, str);
       event.preventDefault();
@@ -14,3 +21,7 @@ InstantTranslate.prototype = {
 
 }
 
+var translator = new InstantTranslate();
+
+chrome.omnibox.onInputChanged.addListener(translator.onInputChanged);
+chrome.omnibox.onInputEntered.addListener(translator.onInputEntered);
