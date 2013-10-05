@@ -1,4 +1,6 @@
 function InstantTranslate(){
+  this.api_key = 'AIzaSyAan9zXDOxt_kaxwUH2jla-_vMsFUNUEoE';
+  this.api_url = 'https://www.googleapis.com/language/translate/v2;';
 }
 
 InstantTranslate.prototype = {
@@ -6,13 +8,13 @@ InstantTranslate.prototype = {
   onInputEntered: function(text)
   {
     if (!text || text.length < 7) {
-      return this.onError();
+      return this.onError("Invalid input");
     }
 
     var params = text.split(' ');
 
     if (!params || params.length < 3) {
-      return this.onError();
+      return this.onError("Invalid input");
     }
 
     var from = params[0],
@@ -45,43 +47,54 @@ InstantTranslate.prototype = {
   translateText: function(from, to, phrase)
   {
     if (!from || !to || !phrase) {
-      return this.onError();
+      return this.onError("missing arguments");
     }
 
-    var apiKey = ' ';
-    var apiUrl = 'https://www.googleapis.com/language/translate/v2?key=' + apiKey +
-      '&source=' + from +
-      '&target=' + to +
-      'callback=translateText&q=' + phrase;
+    var that = this;
 
-    $.ajax({
-      url: apiUrl,
-      dataType: 'jsonp',
-      success: function(response){
-        var translated = response.data.translations[0].translatedText;
-        console.log(translated);
-      },
-      error: function(){
-        console.log("something is fucked up");
+    var request = $.ajax({
+      url: "https://www.googleapis.com/language/translate/v2",
+      data: {
+        key: that.api_key,
+        source: from,
+        target: to,
+        q: phrase
       }
     });
 
-    this.copyToClipboard("translated text");
+    request.done(function( msg ) {
+      that.onSuccess();
+    });
+
+    request.fail(function( jqXHR, textStatus ) {
+      that.onError(textStatus);
+    });
   },
 
-  showNotification: function() {
+  showNotification: function(err) {
+    var message = 'Translation copied to clipboard';
+
+    if (err) {
+      message = err;
+    }
+
     chrome.notifications.clear('successPopup', function() {
       chrome.notifications.create('successPopup', {
         type: 'basic',
         title: 'InstantTranslate',
-        message: 'Translation copied to clipboard',
+        message: message,
         iconUrl: 'logo48.png'
       }, function(id) {});
     });
   },
 
-  onError: function(errMessage) {
+  onError: function(errorMsg) {
+    this.showNotification(errorMsg)
+  },
 
+  onSuccess: function(text) {
+    this.copyToClipboard(text);
+    this.showNotification();
   }
 }
 
