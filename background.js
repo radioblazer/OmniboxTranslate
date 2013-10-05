@@ -16,8 +16,6 @@ InstantTranslate.prototype = {
 
     // if we can avoid having to split the query let's do that instead
     var query = params.splice(2).join(' ');
-
-    this.copyToClipboard(query);
   },
 
   onInputChanged: function(text, suggest) {
@@ -60,5 +58,5 @@ function showNotification() {
 
 var translator = new InstantTranslate();
 
-chrome.omnibox.onInputChanged.addListener(translator.onInputChanged);
-chrome.omnibox.onInputEntered.addListener(translator.onInputEntered);
+chrome.omnibox.onInputChanged.addListener(translator.onInputChanged.bind(translator));
+chrome.omnibox.onInputEntered.addListener(translator.onInputEntered.bind(translator));
