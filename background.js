@@ -1,10 +1,10 @@
 function InstantTranslate(){
-
 }
 
 InstantTranslate.prototype = {
 
-  onInputEntered: function(text) {
+  onInputEntered: function(text)
+  {
     var params = text.split(' ');
 
     if (!params || params.length < 3) {
@@ -18,11 +18,13 @@ InstantTranslate.prototype = {
     var query = params.splice(2).join(' ');
   },
 
-  onInputChanged: function(text, suggest) {
+  onInputChanged: function(text, suggest)
+  {
     console.log('inputChanged: ' + text);
   },
 
-  copyToClipboard: function(str, mimetype) {
+  copyToClipboard: function(str, mimetype)
+  {
     document.oncopy = function(event) {
       event.clipboardData.setData(mimetype, str);
       event.preventDefault();
@@ -30,31 +32,33 @@ InstantTranslate.prototype = {
     document.execCommand("Copy", false, null);
   },
 
-  translate: function(from, to, phrase){
-  	var key = ' ';
-  	var query = 'https://www.googleapis.com/language/translate/v2?key=' + key +
-  				'&source=' + from +
-  				'&target=' + to +
-  				'callback=translateText&q=' + phrase;
+  translateText: function(from, to, phrase)
+  {
+    var key = ' ';
+    var query = 'https://www.googleapis.com/language/translate/v2?key=' + key +
+      '&source=' + from +
+      '&target=' + to +
+      'callback=translateText&q=' + phrase;
 
   },
-  translateText: function(response){
-  	var translated = response.data.translations[0].translatedText;
-  	console.log(translated);
+
+  onError: function(errMessage) {
+
+  },
+
+  showNotification: function() {
+    chrome.notifications.clear('successPopup', function() {
+      chrome.notifications.create('successPopup', {
+        type: 'basic',
+        title: 'InstantTranslate',
+        message: 'Translation copied to clipboard',
+        iconUrl: 'logo48.png'
+      }, function(id) {});
+    });
   }
 
 }
 
-function showNotification() {
-  chrome.notifications.clear('successPopup', function() {
-    chrome.notifications.create('successPopup', {
-      type: 'basic',
-      title: 'InstantTranslate',
-      message: 'Translation copied to clipboard',
-      iconUrl: 'logo48.png'
-    }, function(id) {});
-  });
-}
 
 var translator = new InstantTranslate();
 
