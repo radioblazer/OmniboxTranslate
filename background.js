@@ -21,7 +21,6 @@ InstantTranslate.prototype = {
     var from = params[0],
       to = params[1];
 
-    // if we can avoid having to split the query let's do that instead
     var query = params.splice(2).join(' ');
 
     this.translateText(from, to, query);
