@@ -1,6 +1,7 @@
 function InstantTranslate(){
   this.api_key = 'AIzaSyC4AY79SAW4qjeHjnaivowLRM4PS1OpM9w';
   this.api_url = 'https://www.googleapis.com/language/translate/v2';
+  this.createContextMenu();
 }
 
 InstantTranslate.prototype = {
@@ -90,6 +91,48 @@ showNotification: function(msgObj) {
     }, function(id) {});
   });
 },
+
+createContextMenu: function()
+{
+  var that = this;
+  chrome.contextMenus.create({
+    title: "Translate to English",
+    contexts:["selection"],
+    onclick: function(info, tab){
+      var to = "en";
+      var query = info.selectionText;
+      that.translateDetectedLanguage(to, query);
+    }
+  });
+},
+
+translateDetectedLanguage: function(to, phrase) {
+    if (!to || !phrase) {
+      return this.onError("missing arguments");
+    }
+
+    var that = this;
+
+    $.ajax({
+      url: that.api_url,
+      type: "GET",
+      dataType: "json",
+      data: {
+        key: that.api_key,
+        target: to,
+        q: phrase
+      },
+      success: function(response) {
+        var translation = response.data.translations[0].translatedText;
+        that.onSuccess(translation);
+      },
+      error: function(err) {
+        that.onError(err);
+      }
+    });
+},
+
+
 
 onError: function(errorMsg) {
   this.showNotification({
