@@ -85,7 +85,7 @@ showNotification: function(msgObj) {
   chrome.notifications.clear('successPopup', function() {
     chrome.notifications.create('successPopup', {
       type: 'basic',
-      title: 'InstantTranslate',
+      title: 'Omnibox Translate',
       message: message,
       iconUrl: 'logo48.png'
     }, function(id) {});
