@@ -64,6 +64,7 @@ InstantTranslate.prototype = {
       },
       success: function(response) {
         var translation = response.data.translations[0].translatedText;
+        translation = $("<div/>").html(translation).text();
         that.onSuccess(translation);
       },
       error: function(err) {
@@ -76,7 +77,7 @@ showNotification: function(msgObj) {
   var message;
 
   if (msgObj.translation) {
-    message = 'Translation copied to clipboard: ' + msgObj.translation;
+    message = 'Translation copied to clipboard: ' + decodeURIComponent(msgObj.translation);
   } else {
     message = msgObj.error;
   }
@@ -86,7 +87,7 @@ showNotification: function(msgObj) {
       type: 'basic',
       title: 'Omnibox Translate',
       message: message,
-      iconUrl: 'logo48.png'
+      iconUrl: 'attr1.png'
     }, function(id) {});
   });
 },
